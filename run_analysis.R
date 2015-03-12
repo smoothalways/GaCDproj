@@ -31,5 +31,5 @@ names(data)[names(data)=="V1"] <- "subject"
 # make separate data frame with averages of all variables grouped by activity and subject
 data_agg <- aggregate(data[,3:ncol(data)],by=list(subject = data$subject, activity = data$activity),mean)
 # clean up the environment leaving only the tidy data and aggregated data
-rm(list = c("activity_labels", "features", "subject", "x", "y", "features_v"))
+rm(list = c("activity_labels", "features", "subject", "x", "y", "features_v","data"))
 
