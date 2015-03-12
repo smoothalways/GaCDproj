@@ -32,75 +32,75 @@ The goal of the project is to produce a tidy dataset from the raw data, combinin
 The data are processed with the following script which is in the run_analysis.R file:
 
 
-#assuming the appropriate .txt files are in the working directory
+##assuming the appropriate .txt files are in the working directory
 
 
-# read in the test and train subject dataset into a single dataframe "subject"
+## read in the test and train subject dataset into a single dataframe "subject"
 
 	subject <- rbind(read.table("subject_test.txt"),read.table("subject_train.txt"))
 
 
-# read in the test and train y data set into a single dataframe "y"
+## read in the test and train y data set into a single dataframe "y"
 
 	y <- rbind(read.table("y_test.txt"),read.table("y_train.txt"))
 
 
-# read in the test and train x data set into a single dataframe "x"
+## read in the test and train x data set into a single dataframe "x"
 
 	x <- rbind(read.table("x_test.txt"),read.table("x_train.txt"))
 
 
-# read in the test features data set "features"
+## read in the test features data set "features"
 
 	features <- read.table("features.txt")
 
 
-# read in the labels for the activities "activity_labels"
+## read in the labels for the activities "activity_labels"
 
 	activity_labels <- read.table("activity_labels.txt")
 
 
-# merge the activity lables onto the y data set matching the label name to the appropriate value
-# (uses join from the plyr package to maintain the order of the data)
+## merge the activity lables onto the y data set matching the label name to the appropriate value
+## (uses join from the plyr package to maintain the order of the data)
 
 	library(plyr)
 
 	y <- join(y,activity_labels, by = "V1")
 
 
-# extract the column names column from features as a vector "features_v"
+## extract the column names column from features as a vector "features_v"
 
 	features_v <- as.vector(features$V2)
 
 
-#rename the columns in x_test data.frame to the vector values
+##rename the columns in x_test data.frame to the vector values
 
 	colnames(x) <- features_v
 
 
-# extract only the mean() and std() columns to data.frame "data"
+## extract only the mean() and std() columns to data.frame "data"
 
 	data <- x[,c(colnames(x)[grep("mean\\(",colnames(x))],colnames(x)[grep("std\\(",colnames(x))])]
 
 
-# add and rename the activity column
+## add and rename the activity column
 
 	data <- cbind(y$V2,data)
 	names(data)[names(data)=="y$V2"] <- "activity"
 
 
-# add and rename subject column
+## add and rename subject column
 
 	data <- cbind(subject,data)
 	names(data)[names(data)=="V1"] <- "subject"
 
 
-# make separate data frame "data_agg" with averages of all variables grouped by activity and subject
+## make separate data frame "data_agg" with averages of all variables grouped by activity and subject
 
 	data_agg <- aggregate(data[,3:ncol(data)],by=list(subject = data$subject, activity = data$activity),mean)
 
 
-# clean up the environment leaving only the tidy aggregated data frame
+## clean up the environment leaving only the tidy aggregated data frame
 
 	rm(list = c("activity_labels", "features", "subject", "x", "y", "features_v","data"))
 
